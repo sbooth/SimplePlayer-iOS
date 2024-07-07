@@ -14,9 +14,9 @@ class PlayerViewModel: ObservableObject {
 	private let displayLinkPublisher = DisplayLinkPublisher()
 	private var cancellables = Set<AnyCancellable>()
 
-	private lazy var playbackProgressSubject = PassthroughSubject<Double, Never>()
-	var playbackProgress: AnyPublisher<Double, Never> {
-		playbackProgressSubject
+	private lazy var playbackTimeSubject = PassthroughSubject<AudioPlayer.PlaybackTime, Never>()
+	var playbackTime: AnyPublisher<AudioPlayer.PlaybackTime, Never> {
+		playbackTimeSubject
 			.eraseToAnyPublisher()
 	}
 
@@ -25,8 +25,8 @@ class PlayerViewModel: ObservableObject {
 		displayLinkPublisher
 			.receive(on: DispatchQueue.main)
 			.sink { _ in
-				if let progress = dataModel.player.time?.progress {
-					self.playbackProgressSubject.send(progress)
+				if let time = dataModel.player.time {
+					self.playbackTimeSubject.send(time)
 				}
 			}
 			.store(in: &cancellables)
