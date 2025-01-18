@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2011-2024 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2011-2025 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SimplePlayer-iOS
 // MIT license
 //
@@ -65,15 +65,11 @@ class DataModel: NSObject, ObservableObject {
 }
 
 extension DataModel: AudioPlayer.Delegate {
-	func audioPlayerNowPlayingChanged(_ audioPlayer: AudioPlayer) {
-		if let nowPlaying = audioPlayer.nowPlaying, let track = tracks.first(where: { $0.url == nowPlaying.inputSource.url }){
-			nowPlayingSubject.send(track)
-		} else {
-			nowPlayingSubject.send(nil)
-		}
+	func audioPlayer(_ audioPlayer: AudioPlayer, nowPlayingChanged nowPlaying: PCMDecoding?) {
+		nowPlayingSubject.send(tracks.first(where: { $0.url == nowPlaying?.inputSource.url }))
 	}
 
-	func audioPlayerPlaybackStateChanged(_ audioPlayer: AudioPlayer) {
-		playbackStateSubject.send(audioPlayer.playbackState)
+	func audioPlayer(_ audioPlayer: AudioPlayer, playbackStateChanged playbackState: AudioPlayer.PlaybackState) {
+		playbackStateSubject.send(playbackState)
 	}
 }
