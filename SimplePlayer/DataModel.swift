@@ -65,7 +65,7 @@ class DataModel: NSObject, ObservableObject {
 }
 
 extension DataModel: AudioPlayer.Delegate {
-	func audioPlayer(_ audioPlayer: AudioPlayer, nowPlayingChanged nowPlaying: PCMDecoding?) {
+	func audioPlayer(_ audioPlayer: AudioPlayer, nowPlayingChanged nowPlaying: PCMDecoding?, previouslyPlaying: PCMDecoding?) {
 		nowPlayingSubject.send(tracks.first(where: { $0.url == nowPlaying?.inputSource.url }))
 	}
 
