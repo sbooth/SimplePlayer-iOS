@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2020-2024 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2020-2025 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SimplePlayer-iOS
 // MIT license
 //
@@ -9,11 +9,12 @@ import QuartzCore.CADisplayLink
 
 /// A `Publisher` for `CADisplayLink` events
 struct DisplayLinkPublisher: Publisher {
+	/// The current absolute time in seconds
 	static var currentTime: TimeInterval {
 		return CACurrentMediaTime()
 	}
 
-	class Subscription<S>: Combine.Subscription where S: Subscriber, Never == S.Failure, CFTimeInterval == S.Input {
+	class Subscription<S>: Combine.Subscription where S: Subscriber, S.Failure == Never, S.Input == CFTimeInterval {
 		private lazy var displayLink = CADisplayLink(target: self, selector: #selector(step))
 		private let subscriber: AnySubscriber<CFTimeInterval, Never>
 
@@ -50,13 +51,13 @@ struct DisplayLinkPublisher: Publisher {
 		}
 	}
 
-	public var preferredFramesPerSecond: Int
+	public let preferredFramesPerSecond: Int
 
 	public init(preferredFramesPerSecond: Int = 0) {
 		self.preferredFramesPerSecond = preferredFramesPerSecond
 	}
 
-	public func receive<S>(subscriber: S) where S: Subscriber, Never == S.Failure, CFTimeInterval == S.Input {
+	public func receive<S>(subscriber: S) where S: Subscriber, S.Failure == Never, S.Input == CFTimeInterval {
 		let subscription = Subscription(subscriber: subscriber, preferredFramesPerSecond: preferredFramesPerSecond)
 		subscriber.receive(subscription: subscription)
 	}

@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2011-2024 Stephen F. Booth <me@sbooth.org>
+// Copyright (c) 2011-2025 Stephen F. Booth <me@sbooth.org>
 // Part of https://github.com/sbooth/SimplePlayer-iOS
 // MIT license
 //
@@ -14,8 +14,8 @@ class PlayerViewModel: ObservableObject {
 	private let displayLinkPublisher = DisplayLinkPublisher()
 	private var cancellables = Set<AnyCancellable>()
 
-	private lazy var playbackTimeSubject = PassthroughSubject<AudioPlayer.PlaybackTime, Never>()
-	var playbackTime: AnyPublisher<AudioPlayer.PlaybackTime, Never> {
+	private lazy var playbackTimeSubject = PassthroughSubject<PlaybackTime, Never>()
+	var playbackTime: AnyPublisher<PlaybackTime, Never> {
 		playbackTimeSubject
 			.eraseToAnyPublisher()
 	}
